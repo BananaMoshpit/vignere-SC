@@ -2,61 +2,62 @@
 
 using namespace std;
 
-char FIRST_CHAR = 9; // space
+char FIRST_CHAR = 32; // space
 char LAST_CHAR = 122; // 'z'
 
-string encrypt(string data, string key){
-    int dataSize, keySize, charSum, i, k;
-    string enc = data;
+
+char encrypt(char data, char key){
+    char enc = data + key - FIRST_CHAR; 
+    if(enc > static_cast<int>(LAST_CHAR)) {// keep from trespassing alphabet boundaries
+        enc += FIRST_CHAR - LAST_CHAR - 1;
+    }
+  return  static_cast<char>(enc);  
+}
+
+// ENC[I] =  data[i] + key[k]  - LAST_CHAR - 1 -> data[i] = - key[k]  + LAST_CHAR - enc[i] + 1
+//  L + Y - Z - 1 = J -> L = J - Y + 1
+char decrypt(char data, char key){
+    char dec = data - key + FIRST_CHAR;             
+    if(dec < static_cast<int>(FIRST_CHAR)){             // keep from trespassing alphabet boundaries
+        dec =  data - key  + LAST_CHAR + 1;      //  L + Y - Z - 1 = J -> L = J - Y + 1  
+    }
+  return static_cast<char>(dec); 
+}
+
+string vigenere(string opt, string data, string key){
+    int dataSize, keySize, i, k;
+    char aux;
+    string vig = data;
     dataSize = data.size(); keySize = key.size();
 
     for (i = 0, k = 0; i < dataSize; i++)
     {
-        charSum = data[i] + key[k] - FIRST_CHAR; 
-        if(charSum > static_cast<int>(LAST_CHAR)) {// keep from trespassing alphabet boundaries
-            charSum += FIRST_CHAR - LAST_CHAR - 1;
-            }
+        if(opt == "encrypt"){
+            aux = encrypt(data[i], key[k]);
+        }
+        else{
+            aux = decrypt(data[i], key[k]);
+        }
         
-        enc[i] = static_cast<char>(charSum);
+        vig[i] = static_cast<char>(aux);
         k++;
-        if(k >= keySize)
-            k = 0;
+        if(k >= keySize){
+            k = 0; 
+        }
     }
 
-    return enc;
+    return vig;
     
 }
-
-// data[i] =  charSum - key[k] + FIRST_CHAR; <-  charSum = data[i] + key[k] - FIRST_CHAR;
-// ENC[I] =  data[i] + key[k]  - LAST_CHAR - 1 -> data[i] = - key[k]  + LAST_CHAR - enc[i] + 1
-//  L + Y - Z - 1 = J -> L = J - Y + 1
-string decrypt(string encrypted, string key){
-    int dataSize, keySize, charSum, i, k;
-    string dec = encrypted;
-    dataSize = encrypted.size(); keySize = key.size();
-
-    for (i = 0, k = 0; i < dataSize; i++)
-    {
-        charSum = encrypted[i] - key[k] + FIRST_CHAR;               
-        if(charSum < static_cast<int>(FIRST_CHAR))                 // keep from trespassing alphabet boundaries
-            charSum =  encrypted[i] - key[k]  + LAST_CHAR + 1; //  L + Y - Z - 1 = J -> L = J - Y + 1
-        dec[i] = static_cast<char>(charSum);
-        k++;
-        if(k >= keySize)
-            k = 0;
-    }
-
-    return dec;
-    
-}
-
 int main(){
+    string aux;
+
 /*     cout << static_cast<char>('L' + 'Y' - 'A') << endl; // what i needed
     cout << static_cast<char>('L' + 'Y' - 'Z' - 1) << endl; // what i needed
 
     cout << encrypt("p \r <-para", "asZ") << endl; //rijvs
     cout << decrypt( encrypt("p \n <-para", "asZ"), "KEY") << endl; //rijvs */
-    cout << decrypt( encrypt("Hel>~lO Wo\nrlD", "KEY"), "KEY") << endl; //rijvs // FIXME: TERMINAL DECRYPTS '~' AS '\n'
+/*     cout << decrypt( encrypt("Hel>~lO Wo\nrlD", "KEY"), "KEY") << endl; //rijvs // FIXME: TERMINAL DECRYPTS '~' AS '\n'
 
     cout << encrypt("HEÂLLO", "KEY") << endl; //rijvs
     cout << decrypt( encrypt("HEÃLLO", "KEY"), "KEY") << endl; //rijvs
@@ -70,6 +71,12 @@ int main(){
     cout << encrypt("HELLO", "SDBNO") << endl; //zhmyc
     cout << decrypt( encrypt("HELLO", "SDBNO"), "SDBNO") << endl; //zhmyc
     cout << encrypt("HELLOSDKFJHG", "SDBNO") << endl; //zhmyckglsxzj 
-    cout << decrypt( encrypt("HELLOSDKFJHG", "SDBNO"), "SDBNO") << endl; //zhmyckglsxzj 
+    cout << decrypt( encrypt("HELLOSDKFJHG", "SDBNO"), "SDBNO") << endl; //zhmyckglsxzj  */
+    aux = vigenere( "encrypt", "HELLOSDKFJHG", "SDBNO");
+    cout << aux << endl; //zhmyckglsxzj 
+    aux = vigenere( " ", aux, "SDBNO");
+
+    cout << aux << endl; //zhmyckglsxzj 
+
   return 0;
 }
