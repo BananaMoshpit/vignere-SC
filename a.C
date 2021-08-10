@@ -50,9 +50,9 @@ string vigenere(string opt, string data, string key){
     
 }
 
-vector<tuple<char,long int>> get_frequencies (string data, int keySize){
-    vector<tuple<char,long int>> frequencies;
-    int dataSize, count;
+vector<tuple<char,float>> get_frequencies (string data, int keySize){
+    vector<tuple<char,float>> frequencies;
+    float dataSize, count, freq;
     char aux;
     dataSize = data.size(); count = 0;
 
@@ -61,7 +61,9 @@ vector<tuple<char,long int>> get_frequencies (string data, int keySize){
     {
         aux = static_cast<char>(data[i]);
         count = data.find_last_of(aux) - data.find_first_of(aux) + 1;
-        cout << aux << " " << count << "    ";
+        freq = static_cast<float>(count/dataSize);
+        frequencies.push_back(make_tuple(aux, freq));
+        cout << aux << " " << count << " " << freq << "    ";
     }
     
     return frequencies;
