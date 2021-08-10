@@ -8,7 +8,7 @@ char LAST_CHAR = 122; // 'z'
 
 char encrypt(char data, char key){
     char enc = data + key - FIRST_CHAR; 
-    if(enc > static_cast<int>(LAST_CHAR)) {// keep from trespassing alphabet boundaries
+    if(enc > static_cast<int>(LAST_CHAR)) {
         enc += FIRST_CHAR - LAST_CHAR - 1;
     }
   return  static_cast<char>(enc);  
@@ -35,7 +35,7 @@ string vigenere(string opt, string data, string key){
         if(opt == "encrypt"){
             aux = encrypt(data[i], key[k]);
         }
-        else{
+        else if (opt == "decrypt") {
             aux = decrypt(data[i], key[k]);
         }
         
@@ -49,6 +49,24 @@ string vigenere(string opt, string data, string key){
     return vig;
     
 }
+
+vector<tuple<char,long int>> get_frequencies (string data, int keySize){
+    vector<tuple<char,long int>> frequencies;
+    int dataSize, count;
+    char aux;
+    dataSize = data.size(); count = 0;
+
+    sort(data.begin(), data.end());
+    for (int i = 0; i < dataSize; i++)
+    {
+        aux = static_cast<char>(data[i]);
+        count = data.find_last_of(aux) - data.find_first_of(aux) + 1;
+        cout << aux << " " << count << "    ";
+    }
+    
+    return frequencies;
+}
+
 int main(){
     string aux;
 
@@ -72,11 +90,13 @@ int main(){
     cout << decrypt( encrypt("HELLO", "SDBNO"), "SDBNO") << endl; //zhmyc
     cout << encrypt("HELLOSDKFJHG", "SDBNO") << endl; //zhmyckglsxzj 
     cout << decrypt( encrypt("HELLOSDKFJHG", "SDBNO"), "SDBNO") << endl; //zhmyckglsxzj  */
+
     aux = vigenere( "encrypt", "HELLOSDKFJHG", "SDBNO");
     cout << aux << endl; //zhmyckglsxzj 
-    aux = vigenere( " ", aux, "SDBNO");
+    aux = vigenere( "decrypt", aux, "SDBNO");
 
     cout << aux << endl; //zhmyckglsxzj 
 
+    get_frequencies("w1rrr3aaaa4", 3);
   return 0;
 }
