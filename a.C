@@ -3,31 +3,38 @@
 using namespace std;
 
 char UPPER_FIRST_CHAR = 'A';
+char UPPER_LAST_CHAR = 'Z';
 string DATA, KEY, ENCRYPTED;
 
 string encrypt(string lddata, string lkkey){
-    int lddataSize, lkkeySize, i, k;
+    int lddataSize, lkkeySize, charSum, i, k;
+    string enc = lddata;
     lddataSize = lddata.size(); lkkeySize = lkkey.size();
 
-    ENCRYPTED.clear(); ENCRYPTED = lddata; //TO ACCESS ENCRYOTED LETTERS BY INDEX, CLEANIN GLOBAL
+    //ENCRYPTED.clear(); ENCRYPTED = lddata; //TO ACCESS ENCRYOTED LETTERS BY INDEX, CLEANIN GLOBAL
     //for (i = 0, k = 0; i < lddataSize, k < lkkeySize; i++, k++)
     for (i = 0, k = 0; i < lddataSize; i++)
     {
-        ENCRYPTED[i] = static_cast<char>(lddata[i] + lkkey[k] - UPPER_FIRST_CHAR); // BOTH INPUTS MUST BE UPPERCASE to work
+        charSum = lddata[i] + lkkey[k] - UPPER_FIRST_CHAR; // BOTH INPUTS MUST BE UPPERCASE to work
+        if(charSum > static_cast<int>(UPPER_LAST_CHAR)) // overcomes alphabet boundaries
+            charSum = UPPER_FIRST_CHAR + (charSum  - UPPER_LAST_CHAR) - 1;
+        
         k++;
-        if(k >= lkkeySize - 1)
+        enc[i] = static_cast<char>(charSum);
+        if(k >= lkkeySize)
             k = 0;
     }
 
-    return ENCRYPTED;
+    return enc;
     
 }
 int main(){
-    cout << static_cast<char>('B' + 'C' - 'A') << endl; // what i needed
+    cout << static_cast<char>('L' + 'Y' - 'A') << endl; // what i needed
    /*  cout << static_cast<char>('d' + 'd' - 'a') << endl; // what i needed
     cout << ('a' + 'b') << endl;
     cout << ('a' + 0) << endl ; */
 
     cout << encrypt("HELLO", "KEY") << endl; //rijvs
+    cout << encrypt("HELLO", "SDBNO") << endl; //zhmyc
   return 0;
 }
