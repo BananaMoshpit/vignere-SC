@@ -5,7 +5,7 @@
 using namespace std;
 
 char UPPER_FIRST_CHAR = 9; // space
-char UPPER_LAST_CHAR = 122; // 'z'
+char UPPER_LAST_CHAR = 253; // 'z'
 
 // !FIXME : BOTH INPUTS MUST BE UPPERCASE to work
 string encrypt(string data, string key){
@@ -62,8 +62,8 @@ int main(){
     cout << decrypt( encrypt("p \n <-para", "asZ"), "KEY") << endl; //rijvs */
     cout << decrypt( encrypt("Hel>~lO Wo\nrlD", "KEY"), "KEY") << endl; //rijvs // FIXME: TERMINAL DECRYPTS '~' AS '\n'
 
-    cout << encrypt("HELLO", "KEY") << endl; //rijvs
-    cout << decrypt( encrypt("HELLO", "KEY"), "KEY") << endl; //rijvs
+    cout << encrypt("HEÂLLO", "KEY") << endl; //rijvs
+    cout << decrypt( encrypt("HEÃLLO", "KEY"), "KEY") << endl; //rijvs
 
     cout << encrypt("HELLO WORLD", "KEY") << endl; //rijvs
     cout << decrypt( encrypt("HELLO WORLD", "KEY"), "KEY") << endl; //rijvs
