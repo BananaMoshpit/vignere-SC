@@ -36,5 +36,6 @@ int main(){
 
     cout << encrypt("HELLO", "KEY") << endl; //rijvs
     cout << encrypt("HELLO", "SDBNO") << endl; //zhmyc
+    cout << encrypt("HELLOSDKFJHG", "SDBNO") << endl; //zhmyckglsxzj
   return 0;
 }
