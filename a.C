@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-//CURRENTLY CONSIDERS CIPHER AS A MTRAIX OF UPPERCASE ALPHABET(25) ASCCI
+//CURRENTLY CONSIDERS CIPHER AS A MTRAIX OF UPPERCASE ALPHABET ASCCI
 
 using namespace std;
 
@@ -9,9 +9,9 @@ string DATA, KEY, ENCRYPTED;
 
 string encrypt(string lddata, string lkkey){
     int lddataSize, lkkeySize, charSum, i, k;
-    string enc;
-    
-    enc.clear();
+    string enc = lddata;
+    lddataSize = lddata.size(); lkkeySize = lkkey.size();
+
     for (i = 0, k = 0; i < lddataSize; i++)
     {
         charSum = lddata[i] + lkkey[k] - UPPER_FIRST_CHAR; // BOTH INPUTS MUST BE UPPERCASE to work
@@ -19,7 +19,7 @@ string encrypt(string lddata, string lkkey){
             charSum = UPPER_FIRST_CHAR + (charSum  - UPPER_LAST_CHAR) - 1;
         
         k++;
-        enc.push_back( static_cast<char>(charSum) );
+        enc[i] = static_cast<char>(charSum);
         if(k >= lkkeySize)
             k = 0;
     }
