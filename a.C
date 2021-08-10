@@ -1,13 +1,10 @@
 #include <bits/stdc++.h>
-//CURRENTLY CONSIDERS CIPHER AS A MTRAIX OF UPPERCASE ALPHABET ASCCI
-// tried to clean mess went wrong -- bc treated string as vec?
 
 using namespace std;
 
-char UPPER_FIRST_CHAR = 9; // space
-char UPPER_LAST_CHAR = 253; // 'z'
+char FIRST_CHAR = 9; // space
+char LAST_CHAR = 122; // 'z'
 
-// !FIXME : BOTH INPUTS MUST BE UPPERCASE to work
 string encrypt(string data, string key){
     int dataSize, keySize, charSum, i, k;
     string enc = data;
@@ -15,10 +12,10 @@ string encrypt(string data, string key){
 
     for (i = 0, k = 0; i < dataSize; i++)
     {
-        charSum = data[i] + key[k] - UPPER_FIRST_CHAR; 
-        if(charSum > static_cast<int>(UPPER_LAST_CHAR)) // keep from trespassing alphabet boundaries
-            charSum += UPPER_FIRST_CHAR - UPPER_LAST_CHAR - 1;
-            //charSum = UPPER_FIRST_CHAR + (charSum  - UPPER_LAST_CHAR) - 1;
+        charSum = data[i] + key[k] - FIRST_CHAR; 
+        if(charSum > static_cast<int>(LAST_CHAR)) {// keep from trespassing alphabet boundaries
+            charSum += FIRST_CHAR - LAST_CHAR - 1;
+            }
         
         enc[i] = static_cast<char>(charSum);
         k++;
@@ -30,10 +27,9 @@ string encrypt(string data, string key){
     
 }
 
-// data[i] =  charSum - key[k] + UPPER_FIRST_CHAR; <-  charSum = data[i] + key[k] - UPPER_FIRST_CHAR;
-// ENC[I] =  data[i] + key[k]  - UPPER_LAST_CHAR - 1 -> data[i] = - key[k]  + UPPER_LAST_CHAR - enc[i] + 1
+// data[i] =  charSum - key[k] + FIRST_CHAR; <-  charSum = data[i] + key[k] - FIRST_CHAR;
+// ENC[I] =  data[i] + key[k]  - LAST_CHAR - 1 -> data[i] = - key[k]  + LAST_CHAR - enc[i] + 1
 //  L + Y - Z - 1 = J -> L = J - Y + 1
-// !FIXME : BOTH INPUTS MUST BE UPPERCASE to work
 string decrypt(string encrypted, string key){
     int dataSize, keySize, charSum, i, k;
     string dec = encrypted;
@@ -41,9 +37,9 @@ string decrypt(string encrypted, string key){
 
     for (i = 0, k = 0; i < dataSize; i++)
     {
-        charSum = encrypted[i] - key[k] + UPPER_FIRST_CHAR;               
-        if(charSum < static_cast<int>(UPPER_FIRST_CHAR))                 // keep from trespassing alphabet boundaries
-            charSum =  encrypted[i] - key[k]  + UPPER_LAST_CHAR + 1; //  L + Y - Z - 1 = J -> L = J - Y + 1
+        charSum = encrypted[i] - key[k] + FIRST_CHAR;               
+        if(charSum < static_cast<int>(FIRST_CHAR))                 // keep from trespassing alphabet boundaries
+            charSum =  encrypted[i] - key[k]  + LAST_CHAR + 1; //  L + Y - Z - 1 = J -> L = J - Y + 1
         dec[i] = static_cast<char>(charSum);
         k++;
         if(k >= keySize)
