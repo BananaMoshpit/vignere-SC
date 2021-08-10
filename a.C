@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 //CURRENTLY CONSIDERS CIPHER AS A MTRAIX OF UPPERCASE ALPHABET ASCCI
+// tried to clean mess went wrong -- bc treated string as vec?
 
 using namespace std;
 
@@ -18,8 +19,8 @@ string encrypt(string lddata, string lkkey){
         if(charSum > static_cast<int>(UPPER_LAST_CHAR)) // keep from trespassing alphabet boundaries
             charSum = UPPER_FIRST_CHAR + (charSum  - UPPER_LAST_CHAR) - 1;
         
-        k++;
         enc[i] = static_cast<char>(charSum);
+        k++;
         if(k >= lkkeySize)
             k = 0;
     }
@@ -27,6 +28,7 @@ string encrypt(string lddata, string lkkey){
     return enc;
     
 }
+
 int main(){
     cout << static_cast<char>('L' + 'Y' - 'A') << endl; // what i needed
    /*  cout << static_cast<char>('d' + 'd' - 'a') << endl; // what i needed
