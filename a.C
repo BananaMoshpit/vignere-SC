@@ -16,10 +16,10 @@ char encrypt(char data, char key){
 
 // ENC[I] =  data[i] + key[k]  - LAST_CHAR - 1 -> data[i] = - key[k]  + LAST_CHAR - enc[i] + 1
 //  L + Y - Z - 1 = J -> L = J - Y + 1
-char decrypt(char data, char key){
-    char dec = data - key + FIRST_CHAR;             
+char decrypt(char enc, char key){
+    char dec = enc - key + FIRST_CHAR;             
     if(dec < static_cast<int>(FIRST_CHAR)){             // keep from trespassing alphabet boundaries
-        dec =  data - key  + LAST_CHAR + 1;      //  L + Y - Z - 1 = J -> L = J - Y + 1  
+        dec =  enc - key  + LAST_CHAR + 1;      //  L + Y - Z - 1 = J -> L = J - Y + 1  
     }
   return static_cast<char>(dec); 
 }
@@ -58,7 +58,7 @@ string vigenere(string opt, string data, string key){
     
 }
 // FIXME: NOT N-SORTED: RECEIVES N-SORTED GROUPS
-vector<tuple<char,float>> get_frequencies (string nGroup){
+vector<tuple<char,float>> get_frequency (string nGroup){
     vector<tuple<char,float>> frequencies;
     float nGroupSize, count;
     char aux;
@@ -75,20 +75,27 @@ vector<tuple<char,float>> get_frequencies (string nGroup){
     return frequencies;
 }
 
+char find_key(char data, char enc){
+    char key = enc - data + FIRST_CHAR;             
+    if(key < static_cast<int>(FIRST_CHAR)){             // keep from trespassing alphabet boundaries
+        key =  enc - data  + LAST_CHAR + 1;      //  L + Y - Z - 1 = J -> L = J - Y + 1  
+    }
+  return static_cast<char>(key); 
+}
+
 void break_vigenere(int opt, string data, int keySize){
     vector<tuple<char,float>> nFrequency;
     vector<vector<tuple<char,float>>> allGroupsFrequencies;
-    string nGroup;
-    int aux, dataSize;
-    dataSize = data.size();
+    string nGroup;;
     for (int keyN = 1; keyN <= keySize; keyN++)
     {
         nGroup.clear();
-        for(aux = keyN - 1; aux < data.size(); aux += keySize)
+        for(int i = keyN - 1; i < data.size(); i += keySize)
         {
-            nGroup += data[aux];
+            nGroup += data[i];
         }
         cout << nGroup << " ";
+        nFrequency = get_frequency(nGroup);
     }
     
     cout << data << endl;
@@ -97,26 +104,9 @@ void break_vigenere(int opt, string data, int keySize){
 int main(){
     string aux;
 
-/*     cout << static_cast<char>('L' + 'Y' - 'A') << endl; // what i needed
-    cout << static_cast<char>('L' + 'Y' - 'Z' - 1) << endl; // what i needed
-
-    cout << encrypt("p \r <-para", "asZ") << endl; //rijvs
-    cout << decrypt( encrypt("p \n <-para", "asZ"), "KEY") << endl; //rijvs */
-/*     cout << decrypt( encrypt("Hel>~lO Wo\nrlD", "KEY"), "KEY") << endl; //rijvs // FIXME: TERMINAL DECRYPTS '~' AS '\n'
-
-    cout << encrypt("HEÂLLO", "KEY") << endl; //rijvs
-    cout << decrypt( encrypt("HEÃLLO", "KEY"), "KEY") << endl; //rijvs
-
-    cout << encrypt("HELLO WORLD", "KEY") << endl; //rijvs
-    cout << decrypt( encrypt("HELLO WORLD", "KEY"), "KEY") << endl; //rijvs
-
-    cout << encrypt("F123rom there, we just need to split it into 6 columns (I mean in Python it would be tab  paragraph \n r \r what ", "KEY") << endl; //rijvs
-    cout << decrypt( encrypt("F123rom there, we just need to split it into 6 columns (I mean in Python it would be tab     paragraph \n r \r what ", "KEY"), "KEY") << endl; //rijvs
-
-    cout << encrypt("HELLO", "SDBNO") << endl; //zhmyc
-    cout << decrypt( encrypt("HELLO", "SDBNO"), "SDBNO") << endl; //zhmyc
-    cout << encrypt("HELLOSDKFJHG", "SDBNO") << endl; //zhmyckglsxzj 
-    cout << decrypt( encrypt("HELLOSDKFJHG", "SDBNO"), "SDBNO") << endl; //zhmyckglsxzj  */
+    cout << find_key( 'B',encrypt('B', 'C')) << endl;
+    cout << find_key( '!',encrypt('!', 'C')) << endl;
+    cout << find_key( 'z',encrypt('z', 'C')) << endl;
 
     aux = vigenere( "encrypt", "HELLOSDKFJHG", "SDBNO");
     cout << aux << endl; //zhmyckglsxzj 
@@ -124,7 +114,7 @@ int main(){
 
     cout << encrypt('B', 'C') << endl; //zhmyckglsxzj 
 
-    get_frequencies("w1rrr3aaaa4");
+    get_frequency("w1rrr3aaaa4");
     break_vigenere(0, "azbycx", 2);
     break_vigenere(0, "abcdefabcdefabcdefabcdeff1", 6);
   return 0;
