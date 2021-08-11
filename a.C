@@ -231,7 +231,7 @@ string break_vigenere(int opt, string data, int keySize){
     k += get<0>(key);
     }
     
-    std::cout << data << endl;
+    std::cout <<"\nKEY\n" << k << "\n\n"<< endl;
     
     dec = vigenere("decrypt", data,  k);
     return dec;
@@ -239,14 +239,29 @@ string break_vigenere(int opt, string data, int keySize){
 
 int main(){
     string aux, data, enc, key, hk;
-    key = "ab";
-    data = "abcdefghij";
+
+
+/*     ifstream nameFileout;
+    string line;
+    nameFileout.open("in.txt");
+    while (getline(nameFileout, line))
+    {
+        cout << data;
+    }
+    nameFileout.close();
+ */
+     key = "amha";
+    data = "ohtheblazingtropicnightwhenthewakesaweltoflightthatholdsthehotskytameandthesteadyforefootsnoresthroughtheplanet-powderedfloorswherethescaredwhaleflukesinflame.herplatesarescarredbythesundearlassandherropesaretautwiththedewforwereboomingdownontheoldtrailourowntrailtheouttrailweresaggingsouthonthelongtrailthetrailthatisalwaysnewsometimesithinkwolflarsenmadorhalfmadatleastwhatofhisstrangemoodsandvagariesatothertimesitakehimforagreatmanageniuswhohasneverarrivedandfinallyiamconvincedthatheistheperfecttypeoftheprimitivemanbornathousandyearsorgenerationstoolateandananachronisminthisculminatingcenturyofcivilizationheiscertainlyanindividualistofthemostpronouncedtypenotonlythatbutheisverylonelythereisnocongenialitybetweenhimandtherestofthemenaboardshiphistremendousvirilityandmentalstrengthwallhimaparttheyaremorelikechildrentohimeventhehuntersandaschildrenhetreatsthemdescendingperforcetotheirlevelandplayingwiththemasamanplayswithpuppiesorelseheprobesthemwiththecruelhandofavivisectionistgropingaboutintheirmentalprocessesandexaminingtheirsoulsasthoughtoseeofwhatsoulstuffismade"; 
+
+
+    
     enc = vigenere("encrypt", data, key);
-    hk = break_vigenere(0, enc, 2);
+    hk = break_vigenere(0, enc, key.size());
 
+    cout << "data   " << data << endl;
     cout << "enc    " << enc << endl;
-    cout << "hk " << hk << endl;
-
+   // cout << "hk     " << hk << endl;
+ 
 /*     cout << find_key( 'B',encrypt('B', 'C')) << endl;
     cout << find_key( '!',encrypt('!', '@')) << endl;
     cout << find_key( 'z',encrypt('z', '-')) << endl;
