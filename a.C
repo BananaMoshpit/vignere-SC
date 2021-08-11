@@ -179,12 +179,13 @@ float shifted_freq( vector<pair<char,float>> data, int shift,vector<pair<char,fl
 // figures out the most fitting shift(key) in cipher
 // input has alphabetic order, guesses key by finding shift with least disparangement between both
 // i.e. compares freq diff between A B C & B C A , by index value
+// FIXME : NEEDS TO COMPARE 1ST TABLE -> 1ST DATA, NOT A -> 1ST DATA
 pair<char,float> find_shift(vector<pair<char,float>> nFrequency, vector<pair<char,float>> table){
     int shift;
-    float fitness = 999;
-    float aux;
+    float aux, fitness;
     char key, cipherA;
-
+    
+    fitness = 999;
     shift = FIRST_CHAR;
 
     for (int i = 0; i < LAST_CHAR - FIRST_CHAR; i++)
@@ -195,10 +196,11 @@ pair<char,float> find_shift(vector<pair<char,float>> nFrequency, vector<pair<cha
             fitness = aux;
         }
     }
-    // matching 
+    // matching WHAT IF THERE ARE NO A/ FIRST TO FIRST BRO
     cipherA = get<0>(nFrequency[0 + shift]); 
-    key = find_key('A', cipherA);
-    return make_pair(key, fitness);
+    key = find_key(get<0>(table[0]), cipherA);
+    nasw = make_pair(key, fitness);
+    return nasw;
     
 }
 
@@ -217,24 +219,24 @@ void break_vigenere(int opt, string data, int keySize){
         {
             nGroup += data[i];
         }
-        cout << nGroup << " ";
+        std::cout << nGroup << " ";
         nFrequency = get_frequency(nGroup);
         sort(nFrequency.begin(), nFrequency.end()); // sorting by letter a->z
         
         key = find_shift(nFrequency, ENG);
-        cout << "KEY FOUND " << get<0>(key) << get<0>(key) << "    ";
+        std::cout << "KEY FOUND " << get<0>(key) << get<0>(key) << "    ";
         //shifted_freq(nFrequency,0,ENG);
 
     }
     
-    cout << data << endl;
+    std::cout << data << endl;
     
 }
 
 int main(){
     string aux;
 
-    cout << find_key( 'B',encrypt('B', 'C')) << endl;
+/*     cout << find_key( 'B',encrypt('B', 'C')) << endl;
     cout << find_key( '!',encrypt('!', '@')) << endl;
     cout << find_key( 'z',encrypt('z', '-')) << endl;
 
@@ -247,15 +249,37 @@ int main(){
     get_frequency("w1rrr3aaaa4");
     break_vigenere(0, "azbycx", 2);
     break_vigenere(0, "abcdefabcdefabcdefabcdeff1", 6);
-
+ */
+  pair<char,float> testResult; 
     vector<pair<char,float>> testENG = {
-        {'b', 	8.167 / 100},
-        {'c', 	1.492 / 100},
-        {'d', 	2.782 / 100},
-        {'e', 	4.253 / 100},
+        {'e', 	12.702 / 100},
+        {'f', 	2.228 / 100},
+        {'g', 	2.015 / 100},
+        {'h', 	6.094 / 100},
+        {'i', 	6.966 / 100},
+        {'j', 	0.153 / 100},
+        {'k', 	0.772 / 100},
+        {'l', 	4.025 / 100},
+        {'m', 	2.406 / 100},
+        {'n', 	6.749 / 100},
+        {'o', 	7.507 / 100},
+        {'p', 	1.929 / 100},
+        {'q', 	0.095 / 100},
+        {'r', 	5.987 / 100},
+        {'s', 	6.327 / 100},
+        {'t', 	9.056 / 100},
+        {'a', 	8.167 / 100},
+{'b', 	1.492 / 100},
+{'c', 	2.782 / 100},
+    {'v', 	0.978 / 100},
+    {'w', 	2.360 / 100},
+    {'x', 	0.150 / 100},
+    {'y', 	1.974 / 100},
+    {'z', 	0.074 / 100}
     };
-    cout << "BREKA \n\n" << get<0>(find_shift(testENG, ENG)) << get<1>(find_shift(testENG, ENG));
-
+    testResult = find_shift(testENG, ENG);
+    std::cout << "BREKA \n\n" << static_cast<char>( get<0>(testResult)) << get<1>(testResult) ;
+std::cout << "\n\n";
     
   return 0;
 }
