@@ -2,8 +2,8 @@
 
 using namespace std;
 
-char FIRST_CHAR = 32; // space
-char LAST_CHAR = 122; // 'z'
+char FIRST_CHAR = 30; // space
+char LAST_CHAR = 221; // 'z'
 
 
 char encrypt(char data, char key){
@@ -105,8 +105,8 @@ int main(){
     string aux;
 
     cout << find_key( 'B',encrypt('B', 'C')) << endl;
-    cout << find_key( '!',encrypt('!', 'C')) << endl;
-    cout << find_key( 'z',encrypt('z', 'C')) << endl;
+    cout << find_key( '!',encrypt('!', '@')) << endl;
+    cout << find_key( 'z',encrypt('z', '-')) << endl;
 
     aux = vigenere( "encrypt", "HELLOSDKFJHG", "SDBNO");
     cout << aux << endl; //zhmyckglsxzj 
@@ -119,3 +119,13 @@ int main(){
     break_vigenere(0, "abcdefabcdefabcdefabcdeff1", 6);
   return 0;
 }
+
+/* BUG REPORT 
+char LAST_CHAR = 221+;
+    cout << find_key( 'B',encrypt('B', 'C')) << endl;
+    cout << find_key( '!',encrypt('!', '@')) << endl;
+    cout << find_key( 'z',encrypt('z', '-')) << endl;
+
+    !!WRONG KEYS FOUND
+    
+ */
