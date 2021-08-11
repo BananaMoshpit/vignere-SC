@@ -23,6 +23,14 @@ char decrypt(char data, char key){
     }
   return static_cast<char>(dec); 
 }
+/* 
+char decrypt(char data, char key){
+    char dec = data - key + FIRST_CHAR;             
+    if(dec < static_cast<int>(FIRST_CHAR)){             // keep from trespassing alphabet boundaries
+        dec =  data - key  + LAST_CHAR + 1;      //  L + Y - Z - 1 = J -> L = J - Y + 1  
+    }
+  return static_cast<char>(dec); 
+} */
 
 string vigenere(string opt, string data, string key){
     int dataSize, keySize, i, k;
@@ -49,24 +57,41 @@ string vigenere(string opt, string data, string key){
     return vig;
     
 }
-
-vector<tuple<char,float>> get_frequencies (string data, int keySize){
+// FIXME: NOT N-SORTED: RECEIVES N-SORTED GROUPS
+vector<tuple<char,float>> get_frequencies (string nGroup){
     vector<tuple<char,float>> frequencies;
-    float dataSize, count, freq;
+    float nGroupSize, count;
     char aux;
-    dataSize = data.size(); count = 0;
+    nGroupSize = nGroup.size(); count = 0;
 
-    sort(data.begin(), data.end());
-    for (int i = 0; i < dataSize; i++)
+    sort(nGroup.begin(), nGroup.end());
+    for (int i = 0; i < nGroupSize; i++)
     {
-        aux = static_cast<char>(data[i]);
-        count = data.find_last_of(aux) - data.find_first_of(aux) + 1;
-        freq = static_cast<float>(count/dataSize);
-        frequencies.push_back(make_tuple(aux, freq));
-        cout << aux << " " << count << " " << freq << "    ";
+        aux = static_cast<char>(nGroup[i]);
+        count = nGroup.find_last_of(aux) - nGroup.find_first_of(aux) + 1;
+        frequencies.push_back(make_tuple(aux, count/nGroupSize));
     }
     
     return frequencies;
+}
+
+void break_vigenere(int opt, string data, int keySize){
+    vector<tuple<char,float>> nFrequency;
+    vector<vector<tuple<char,float>>> allGroupsFrequencies;
+    string nGroup;
+    int aux, dataSize;
+    dataSize = data.size();
+    for (int keyN = 1; keyN <= keySize; keyN++)
+    {
+        nGroup.clear();
+        for(aux = keyN - 1; aux < data.size(); aux += keySize)
+        {
+            nGroup += data[aux];
+        }
+        cout << nGroup << " ";
+    }
+    
+    cout << data << endl;
 }
 
 int main(){
@@ -97,8 +122,10 @@ int main(){
     cout << aux << endl; //zhmyckglsxzj 
     aux = vigenere( "decrypt", aux, "SDBNO");
 
-    cout << aux << endl; //zhmyckglsxzj 
+    cout << encrypt('B', 'C') << endl; //zhmyckglsxzj 
 
-    get_frequencies("w1rrr3aaaa4", 3);
+    get_frequencies("w1rrr3aaaa4");
+    break_vigenere(0, "azbycx", 2);
+    break_vigenere(0, "abcdefabcdefabcdefabcdeff1", 6);
   return 0;
 }
