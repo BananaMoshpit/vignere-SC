@@ -2,9 +2,6 @@
 
 using namespace std;
 
-char FIRST_CHAR = 30; // space
-char LAST_CHAR = 221; // 'z'
-
 // Both alphabets' frequency analysis from: https://pt.wikipedia.org/wiki/Frequ%C3%AAncia_de_letras
 const vector<pair<char,float>> ENG = {
     {'a', 	8.167 / 100},
@@ -62,6 +59,11 @@ const vector<pair<char,float>> PT = {
     {'y',   0.01 / 100},
     {'z',   0.47 / 100}
 };
+
+char FIRST_CHAR = 97; // space
+char LAST_CHAR = 122; // 'z'
+int F_TABLE_SIZE = 26;
+
 
 char encrypt(char data, char key){
     char enc = data + key - FIRST_CHAR; 
@@ -140,11 +142,74 @@ char find_key(char data, char enc){
     }
   return static_cast<char>(key); 
 }
+// Returns index of first pair w alphabetic char
+int first_alpha(vector<pair<char,float>> data){
+    auto it = std::find_if(data.begin(), data.end(), [](const pair<char, float>& e) {return isalpha(get<0>(e)); } );
+    if (it != data.end()) {
+        return std::distance( data.begin(), it );
+    }
+    return -1;
+}
+
+float shifted_freq( vector<pair<char,float>> data, int shift,vector<pair<char,float>> table) {
+    int turnAround, firstAlpha, alphaSizeData, i;
+    float diffSum, diff;
+    sort(data.begin(), data.end()); // by letter
+   /*  firstAlpha = first_alpha(data);
+    alphaSizeData = data.size() -  firstAlpha; // TEST ON DATA[0] = 'A' // amount of different letters in data
+  */   diffSum = 0; i = 0; turnAround = 0; alphaSizeData = data.size();
+    
+     while (i < alphaSizeData && i < F_TABLE_SIZE)
+    {
+        if(shift + i < alphaSizeData){
+            diff = abs(get<1>(table[i]) - get<1>(data[i + shift]));
+        }
+        else
+        {
+            diff = abs(get<1>(table[i]) - get<1>(data[turnAround]));
+        }
+        diffSum += diff;
+        i++;
+    } 
+    
+    return diffSum;
+    
+}
+// receives alpha sorted frequency of characters and reference freq table
+// figures out the most fitting shift(key) in cipher
+// input has alphabetic order, guesses key by finding shift with least disparangement between both
+// i.e. compares freq diff between A B C & B C A , by index value
+pair<char,float> find_shift(vector<pair<char,float>> nFrequency, vector<pair<char,float>> table){
+    int shift;
+    float fitness = 999;
+    float aux;
+    char key, cipherA;
+
+    shift = FIRST_CHAR;
+
+    for (int i = 0; i < LAST_CHAR - FIRST_CHAR; i++)
+    {
+        aux = shifted_freq(nFrequency,i,ENG);
+        if(aux < fitness){
+            shift = i;
+            fitness = aux;
+        }
+    }
+    // matching 
+    cipherA = get<0>(nFrequency[0 + shift]); 
+    key = find_key('A', cipherA);
+    return make_pair(key, fitness);
+    
+}
+
 
 void break_vigenere(int opt, string data, int keySize){
     vector<pair<char,float>> nFrequency;
+    pair<char,float> key;
+    float bestMatch;
     vector<vector<pair<char,float>>> allGroupsFrequencies;
     string nGroup;;
+
     for (int keyN = 1; keyN <= keySize; keyN++)
     {
         nGroup.clear();
@@ -154,9 +219,16 @@ void break_vigenere(int opt, string data, int keySize){
         }
         cout << nGroup << " ";
         nFrequency = get_frequency(nGroup);
+        sort(nFrequency.begin(), nFrequency.end()); // sorting by letter a->z
+        
+        key = find_shift(nFrequency, ENG);
+        cout << "KEY FOUND " << get<0>(key) << get<0>(key) << "    ";
+        //shifted_freq(nFrequency,0,ENG);
+
     }
     
     cout << data << endl;
+    
 }
 
 int main(){
@@ -175,6 +247,16 @@ int main(){
     get_frequency("w1rrr3aaaa4");
     break_vigenere(0, "azbycx", 2);
     break_vigenere(0, "abcdefabcdefabcdefabcdeff1", 6);
+
+    vector<pair<char,float>> testENG = {
+        {'b', 	8.167 / 100},
+        {'c', 	1.492 / 100},
+        {'d', 	2.782 / 100},
+        {'e', 	4.253 / 100},
+    };
+    cout << "BREKA \n\n" << get<0>(find_shift(testENG, ENG)) << get<1>(find_shift(testENG, ENG));
+
+    
   return 0;
 }
 
