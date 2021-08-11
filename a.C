@@ -2,9 +2,9 @@
 
 using namespace std;
 
-char FIRST_CHAR = 30; // space
-char LAST_CHAR = 221; // 'z'
-
+char FIRST_CHAR = 32; // space
+char LAST_CHAR = 122; // 'z'
+ofstream out("output.txt");
 
 char encrypt(char data, char key){
     char enc = data + key - FIRST_CHAR; 
@@ -70,6 +70,7 @@ vector<tuple<char,float>> get_frequency (string nGroup){
         aux = static_cast<char>(nGroup[i]);
         count = nGroup.find_last_of(aux) - nGroup.find_first_of(aux) + 1;
         frequencies.push_back(make_tuple(aux, count/nGroupSize));
+        i += count ;
     }
     
     return frequencies;
@@ -83,28 +84,70 @@ char find_key(char data, char enc){
   return static_cast<char>(key); 
 }
 
-void break_vigenere(int opt, string data, int keySize){
+bool tuple_sort_sec(const tuple<char , float>& a,
+               const tuple<char , float>& b)
+{
+    return (get<1>(a) > get<1>(b));
+}
+
+string break_vigenere(int opt, string data, int keySize, string reKey){
     vector<tuple<char,float>> nFrequency;
     vector<vector<tuple<char,float>>> allGroupsFrequencies;
-    string nGroup;;
+    char hlp;
+    string nGroup, key;
     for (int keyN = 1; keyN <= keySize; keyN++)
     {
         nGroup.clear();
         for(int i = keyN - 1; i < data.size(); i += keySize)
         {
-            nGroup += data[i];
+            nGroup += static_cast<int>(data[i]);
         }
-        cout << nGroup << " ";
+        out << nGroup << " ";
         nFrequency = get_frequency(nGroup);
+        switch (keyN)
+        {
+        case 1:
+        hlp = vigenere("decrypt", static_cast<string>(get<0>(nFrequency[0])),"k")[0];
+            key += find_key(hlp ,'get<0>(nFrequency[0]));
+            break;
+                case 2:
+                hlp = vigenere("decrypt", get<0>(nFrequency[0],"e"))[0];
+            key += find_key(hlp ,'get<0>(nFrequency[0]));
+            break;
+                case 3:
+                hlp = vigenere("decrypt", get<0>(nFrequency[0],"y"))[0];
+            key += find_key(hlp ,'get<0>(nFrequency[0]));
+            break;
+        
+        default:
+        key += "!!";
+            break;
+        }
+/*         sort(nFrequency.begin(), nFrequency.end(), tuple_sort_sec);
+        key += find_key('e', get<0>(nFrequency[0])); */
     }
     
-    cout << data << endl;
+    cout << "\n\n !!! KEYKEY >> "<< key << "\n\n " << endl;
+    return reKey;
+}
+
+void find_shift(vector<tuple<char,float>> data){
+    
 }
 
 int main(){
-    string aux;
+    string aux, key;
 
-    cout << find_key( 'B',encrypt('B', 'C')) << endl;
+    
+
+    aux = "radarZmonkeyZsomeoneZissueZcoachZbrainZrareZcautionZcertainZwhaleZmatterZtoolZvisitZgirlZstateZflockZmerryZmushroomZtattooZauditZjunkZsirenZvirusZevidenceZjoinZbenefitZlabZgasZmethodZpenaltyZdebateZfanZcauseZpeaceZstoryZneitherZvolcanoZtrafficZbringZmuchZsectionZfenceZarmedZfeeZvesselZdwarfZearthZtwelveZbirthZfingerZmaterialZomitZacousticZmonsterZvolcanoZsilentZinnocentZdollZforumZloanZswallowZreviewZchurnZgymZoceanZfameZarmorZoldZquizZpumpkinZcountryZtellZfacultyZdemandZweatherZwaterZunfairZrewardZsituateZtorchZbraveZgunZshipZorangeZfatigueZdropZbubbleZbreadZvoiceZmedalZexplainZvillageZnobleZhugeZarrowZcardarrowZtorchZvendorZweirdZquizZneitherZsituateZsuchZsystemZravenZdieselZtextZtrayZdifferZamongZsuspectZaskZbargainZbundleZsilentZriskZjustZbeautyZembarkZpulseZpoleZincreaseZtowardZfuelZkiteZjeansZcheapZeffortZevolveZchampionZmailZspellZcardZcarryZclusterZhalfZunknownZtackleZclumpZimmuneZwishZwolfZbelow";
+    aux = "not very enticingly authoritative";
+    aux = vigenere("encrypt", aux, "hello");
+    key = break_vigenere(0, aux, 5, "hello");
+    cout << vigenere("decrypt", aux, key) << endl;
+    cout << "\n"<< vigenere("decrypt", aux, "hello") << endl;
+
+   /*  cout << find_key( 'B',encrypt('B', 215)) << endl;
     cout << find_key( '!',encrypt('!', '@')) << endl;
     cout << find_key( 'z',encrypt('z', '-')) << endl;
 
@@ -116,11 +159,12 @@ int main(){
 
     get_frequency("w1rrr3aaaa4");
     break_vigenere(0, "azbycx", 2);
-    break_vigenere(0, "abcdefabcdefabcdefabcdeff1", 6);
+    break_vigenere(0, "abcdefabcdefabcdefabcdeff1", 6); */
+    out.close();
   return 0;
 }
 
-/* BUG REPORT 
+/* BUG REPORT : FIXED, :: INPUT CHARA OVERFLOW-- MUST PASS A\SCII VAL IE 215 INSTREAD OF ×
 char LAST_CHAR = 221+;
     cout << find_key( 'B',encrypt('B', 'C')) << endl;
     cout << find_key( '!',encrypt('!', '@')) << endl;
