@@ -67,7 +67,7 @@ const vector<pair<char,float>> PT = {
     {'z',   0.47 / 100}
 };
 
-const static char FIRST_CHAR = 01; //01 97 31
+const static char FIRST_CHAR = 31; //01 97 31
 const static char LAST_CHAR = 254; // 254 122 126
 const static int F_TABLE_SIZE = 26;
 
@@ -151,27 +151,6 @@ char find_key(char data, char enc){
   return static_cast<char>(key); 
 }
 
-float shifted_freq( vector<pair<char,float>> data, int shift,vector<pair<char,float>> table) {
-    int turnAround, sizeData, i;
-    float diffSum, diff;
-    sort(data.begin(), data.end()); // by letter
-    diffSum = 0; i = 0; turnAround = 0; sizeData = data.size();
-    
-     while (i < F_TABLE_SIZE && turnAround < sizeData) 
-    {
-        if(shift + i < sizeData){
-            diff = abs(get<1>(table[i]) - get<1>(data[i + shift]));
-        }
-        else
-        {
-            diff = abs(get<1>(table[i]) - get<1>(data[turnAround]));
-        }
-        diffSum += diff;
-        i++;
-    } 
-    
-    return diffSum; 
-}
 
 void print_freq_graph(vector<pair<char,float>> vfrq){
     float j;
