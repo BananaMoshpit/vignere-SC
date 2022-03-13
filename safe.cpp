@@ -178,7 +178,7 @@ void print_freq_graph(vector<pair<char,float>> vfrq){
     for (int i = 0; i < vfrq.size(); i++)
     {
         //std::cout << static_cast<int>(get<0>(vfrq[i])) << ':' << get<0>(vfrq[i]);
-        std::cout << i <<":" << static_cast<int>(get<0>(vfrq[i])) << ':' << get<0>(vfrq[i]);
+        std::cout << i << ":";
         for (j = 0; j < (get<1>(vfrq[i]) * 100.00); j++)
         {
             if(i&1)
@@ -234,14 +234,13 @@ string break_vigenere(string data, int keySize, vector<pair<char,float>> table){
             cout << "Frequência das letras de a - b em Inglês:" << endl;
             print_freq_graph(ENG);
         }
-        cout << "nota: abaixo se considera caracteres como espaço, ponto e vírgula além das letras do gráfico acima. Recomenda-se considerar os picos maiores para encontrar o shift.talvez o caractere  mais frequente abaixo seja o espaço." << endl;
-        cout << "baseado no gráfico acima, qual o shift do gráfico abaixo?" << endl;
-        cout << "digite um número de 0 - 26" << endl;
+        cout << "Abaixo se considera caracteres como espaço, ponto e vírgula além das letras do gráfico acima. Recomenda-se considerar o começo de um gráfico com vários picos para encontrar o caesar cipher de 'a'.talvez o caractere  mais frequente abaixo seja o espaço." << endl;
+        cout << "qual o número da linha no gráfico acima que representa a frequência da letra 'a'?" << endl;
         print_freq_graph(nFrequency);       
         cin >> shift;
         //k += decrypt('a', get<0>(nFrequency[shift]));
-        cout << "caesar:" << decrypt('a', get<0>(nFrequency[shift]));
-        k += decrypt('a', get<0>(nFrequency[shift]));
+        cout << "caesar:" << find_key('a', get<0>(nFrequency[shift])) << endl;
+        k += find_key('a', get<0>(nFrequency[shift]));
     }
     
     cout <<"\nKEY\n" << k << "\n\n"<< endl;
@@ -293,7 +292,7 @@ int main(){
     //asciiData = get_ASCII(data);
     print_freq_graph(PT);
 
-   key = "aer";
+   key = "?aer";
 //    data = "Á";
 //    enc = vigenere("encrypt", data, key);
 //    dec =  vigenere("decrypt", enc, key);
