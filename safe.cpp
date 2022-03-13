@@ -4,6 +4,7 @@
 //TODO: TRANSLATE USER INPUT SHIFT INTO A DECRYPT FUNC
 //TODO: FIND AN EQUATIONG TO DECRYPT BY KEY
 //TODO: SUGGEST USER WHEN PICK FREQ-- BARRIGA ENG  == Ij b a r r i g a
+//FIXME BREAK VIGNERE ONLY FINDING RIGHT KEY WITH 31 -> 254 CHARS RANGE
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -66,8 +67,8 @@ const vector<pair<char,float>> PT = {
     {'z',   0.47 / 100}
 };
 
-const static char FIRST_CHAR = 31; //01 97
-const static char LAST_CHAR = 126; // 254 122
+const static char FIRST_CHAR = 01; //01 97 31
+const static char LAST_CHAR = 254; // 254 122 126
 const static int F_TABLE_SIZE = 26;
 
 // encrypts data from a key
