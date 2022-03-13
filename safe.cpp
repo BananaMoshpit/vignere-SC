@@ -86,6 +86,15 @@ char decrypt(char enc, char key){
   return static_cast<char>(dec); 
 }
 
+// get key given original data and cipher
+char find_key(char data, char enc){
+    char key = enc - data + FIRST_CHAR;             
+    if(key < static_cast<int>(FIRST_CHAR)){ // keep from trespassing alphabet boundaries
+        key =  enc - data  + LAST_CHAR + 1;  //  L + Y - Z - 1 = J -> L = J - Y + 1  
+    }
+  return static_cast<char>(key); 
+}
+
 // encrypts or decrypts a string from a key 
 string vigenere(string opt, string data, string key);
 string vigenere(string opt, string data, string key){
@@ -115,7 +124,7 @@ string vigenere(string opt, string data, string key){
     
 }
 
-// PS: NOT N-SORTED: RECEIVES N-SORTED GROUPS
+// PS: NOT N-SELECTED: RECEIVES N-SELECTED GROUPS
 vector<pair<char,float>> get_frequency (string nGroup){
     vector<pair<char,float>> frequencies;
     float nGroupSize, count;
@@ -127,69 +136,11 @@ vector<pair<char,float>> get_frequency (string nGroup){
     {
         aux = static_cast<char>(nGroup[i]);
         count = nGroup.find_last_of(aux) - nGroup.find_first_of(aux) + 1;
-        frequencies.push_back(make_pair(aux, count/nGroupSize));
+        frequencies.push_back(make_pair(aux, count/nGroupSize)); //WHY SHOULD IT BE BY TOTAL OF LETTERS IN TEXT OR BY TOTAL LETTERS IN ALPHABET???
         i += count - 1;
     }
     
     return frequencies;
-}
-
-// get key given original data and cipher
-char find_key(char data, char enc){
-    char key = enc - data + FIRST_CHAR;             
-    if(key < static_cast<int>(FIRST_CHAR)){ // keep from trespassing alphabet boundaries
-        key =  enc - data  + LAST_CHAR + 1;  //  L + Y - Z - 1 = J -> L = J - Y + 1  
-    }
-  return static_cast<char>(key); 
-}
-
-float shifted_freq( vector<pair<char,float>> data, int shift,vector<pair<char,float>> table) {
-    int turnAround, sizeData, i;
-    float diffSum, diff;
-    sort(data.begin(), data.end()); // by letter
-    diffSum = 0; i = 0; turnAround = 0; sizeData = data.size();
-    
-     while (i < F_TABLE_SIZE && turnAround < sizeData) 
-    {
-        if(shift + i < sizeData){
-            diff = abs(get<1>(table[i]) - get<1>(data[i + shift]));
-        }
-        else
-        {
-            diff = abs(get<1>(table[i]) - get<1>(data[turnAround]));
-        }
-        diffSum += diff;
-        i++;
-    } 
-    
-    return diffSum;
-    
-}
-// receives alpha sorted frequency of characters and reference freq table
-// figures out the most fitting shift(key) in cipher
-// input has alphabetic order, guesses key by finding shift with least disparangement between both
-// i.e. compares freq diff between A B C & B C A , by index value
-pair<char,float> find_shift(vector<pair<char,float>> nFrequency, vector<pair<char,float>> table){
-    int shift,freqSize ;
-    float aux, fitness;
-    char key, cipherA;
-    freqSize = nFrequency.size();
-    fitness = 999;
-    shift = FIRST_CHAR;
- 
-        for (int i = 0; i < freqSize; i++)
-        {
-            aux = shifted_freq(nFrequency,i,ENG);
-            if(aux < fitness){
-                shift = i;
-                fitness = aux;
-            }
-        }
-    
-    cipherA = get<0>(nFrequency[0 + shift - 1]); 
-    key = find_key(get<0>(table[0]), cipherA);
-    return make_pair(key, fitness);
-    
 }
 
 void print_freq_graph(vector<pair<char,float>> vfrq){
@@ -215,27 +166,30 @@ string break_vigenere(string data, int keySize, vector<pair<char,float>> table){
     vector<pair<char,float>> nFrequency;
     pair<char,float> key;
     string nGroup, dec, k;
+int shift;
 
     for (int keyN = 1; keyN <= keySize; keyN++)
     {
         nGroup.clear();
-        for(int i = keyN - 1; i < dataSize; i += keySize)
+        for(int i = keyN - 1; i < dataSize; i += keySize) //right?? Tested, yeah
         {
             nGroup += data[i];
         }
         nFrequency = get_frequency(nGroup);// freq analysis from nGroup characters
         sort(nFrequency.begin(), nFrequency.end()); // sorting by letter a->z
-        print_freq_graph(nFrequency);
-        key = find_shift(nFrequency, table);
-        k += get<0>(key);
+        
+// GETTING frequency& asking user to fund the shift
+cout << "given the graph above,  in what shift is the graph below?" << endl;
+print_freq_graph(nFrequency);
+          k += shift + 97; //WHY submittable to change      
     }
     
     cout <<"\nKEY\n" << k << "\n\n"<< endl;
     
-   // dec = vigenere("decrypt", data,  k);
     return k;
 }
 //reads text and ignores spaces
+//WHY IGNORING SPACES??
 string read_from_in(string fileName){
     string data, read;
    fstream in;
