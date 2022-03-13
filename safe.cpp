@@ -191,10 +191,10 @@ pair<char,float> find_shift(vector<pair<char,float>> nFrequency, vector<pair<cha
 }
 
 void print_freq_graph(vector<pair<char,float>> vfrq){
-    int j;
+    float j;
     for (int i = 0; i < vfrq.size(); i++)
     {
-        for (j = 0; j < get<1>(vfrq[i]); j++)
+        for (j = 0; j < get<1>(vfrq[i]) * 1000.00; j++)
         {
             std::cout << '-';
         }
