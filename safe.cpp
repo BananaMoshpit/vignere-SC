@@ -1,10 +1,4 @@
-//FIXME: STRINGS LIKE "Á" IS READ AS SIZE() == 2 AND WRECKS ENCRYPT/DECRYPT SHIFT OPERATIONS' LOGIC
-//TODO: IMPLEMENT INPUT_KEY AND FIND_SHIFT TO BREAK VIGNERE
-//TODO: FIX DECRYPT FUNC
-//TODO: TRANSLATE USER INPUT SHIFT INTO A DECRYPT FUNC
-//TODO: FIND AN EQUATIONG TO DECRYPT BY KEY
 //TODO: SUGGEST USER WHEN PICK FREQ-- BARRIGA ENG  == Ij b a r r i g a
-//FIXME BREAK VIGNERE ONLY FINDING RIGHT KEY WITH 31 -> 254 CHARS RANGE
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -66,35 +60,7 @@ const vector<pair<char,float>> PT = {
     {'y',   0.01 / 100},
     {'z',   0.47 / 100}
 };
-//TODO: DELETE BELOW ONCE USELESS
-const vector<pair<char,float>> DATA_TEST = {
-    {'a',   10.63 },
-    {'b',   1.04 },
-    {'c',   3.88 },
-    {'d',   4.99 },
-    {'e',   12.57 },
-    {'f',   10.02 },
-    {'g',   10.30 },
-    {'h',   10.28 },
-    {'i',   10.18 },
-    {'j',   10.40 },
-    {'k',   10.02 },
-    {'l',   10.78 },
-    {'m',   10.74 },
-    {'n',   5.05 },
-    {'o',   10.73 },
-    {'p',   2.52 },
-    {'q',   9.20 },
-    {'r',   6.53 },
-    {'s',   7.81 },
-    {'t',   4.34 },
-    {'u',   4.63 },
-    {'v',   1.67 },
-    {'w',   0.01 },
-    {'x',   0.21 },
-    {'y',   0.01 },
-    {'z',   0.47 }
-};
+
 // 31 254 works, tryna a-z
 const static char FIRST_CHAR = 97; //01 97 31 
 const static char LAST_CHAR = 122; // 254 122 126
@@ -348,9 +314,11 @@ string break_vigenere(string data, int keySize){
             print_freq_graph(ENG);
         }
         cout << "Seguem os gráficos de frequência de letras. Compare-os para descobrir a linguagem da mensagem original e encontre a linha que representa 'a' no gráfico de DATA" << endl;
-        cout << "Dica: Em inglês, de t-e tem-se colunas: t(alta), u-z(muito baixas), a(2a maior), e(maior). Em PT, a > e, t ~= u   " << endl;
-        cout << "Digite um número 0-25" << endl;
+        //cout << "Dica: Em inglês, as colunas de t-e são: t(alta), u-z(muito baixas), a(2a maior), e(maior). Em PT, a > e, t ~= u " << endl;
+        cout << "Dica: em inglês, há 1 coluna maior(t) sucedida por 6 baixíssimas(u-z), que antecedem uma das maiores(a), sucedida por 3 menores(b-d) e pela maior(e)." << endl;
+        cout << "Considere apenas o gráfico da linguagem escolhida." << endl;
         print_freq_graph(nFrequency);       
+        cout << "Digite um número 0-25: " ;
         cin >> shift;
         //k += decrypt('a', get<0>(nFrequency[shift]));
         cout << "caesar:" << find_key('a', get<0>(nFrequency[shift])) << endl;
@@ -359,7 +327,6 @@ string break_vigenere(string data, int keySize){
     
     cout <<"\nKEY\n" << k << "\n\n"<< endl;
     
-   // dec = vigenere("decrypt", data,  k);
     return k;
 }
 //reads text and ignores spaces
@@ -395,8 +362,7 @@ string get_ASCII( string data){
     }
     return ascii;
 }
-//TODO ACCEPT SPACES OR NOT CONSIDER THEM W/O EXCLUDING THEM FROM DATA-- CONSIDER TAKE IT OFF ONLY FOR BREAK VIGNERE!!!
-//TODO: GET USER INPUT
+
 //TODO: WRITE ON OUTPUT FILE WITHOUT DELETING PREVIOUS
 void userInterface(){
     cout << "Interface de usuário, Código de Vigenère.." << endl;
@@ -492,49 +458,6 @@ int main(){
     string aux, data, asciiData, enc, key, hk, read, dec;
     ofstream out("out.txt", ofstream::out | ofstream::trunc);
     userInterface();
-/* 
-    data = read_from_in("desafio2.txt"); 
-    data = get_ASCII(data);
-
-    find_key_size(data);
-//    asciiData = get_ASCII(data);
-    //asciiData = get_ASCII(data);
-//    print_freq_graph(DATA_TEST);
-
-   key = "?aerq";
-//    data = "Á";
-//    enc = vigenere("encrypt", data, key);
-//    dec =  vigenere("decrypt", enc, key);
-//   cout <<  data << endl;
-//   cout << enc << endl;
-//   cout << dec << endl;
-
-
-//  out << break_vigenere(data, 4, ENG );
-   data = "Three days of rest, three blessed days of rest, are what I had with Wolf Larsen, eating at the cabin  able and doing nothing but discuss life, literature, and the universe, the while Thomas  fumed  and raged and did my work as well as his own. Watch out for squalls, is all I can say to you, was Louis’s warning, given during a spare half-hour on   while Wolf Larsen was engaged in straightening out a row among the hunters. Ye cant tell whatll be happenin, Louis went on, in response to my query for more definite information. The mans as contrary as air currents or water currents. You can never guess the ways Tis just as youre thinkin you know him and are makin a favourable slant along him, that he  hirls around, dead ahead and comes howlin down upon you and arippin";
-////   dta = "A Itália negociou com os Aliados sua entrada no conflito em abril de 1915.[] Os italianos renunciaram a sua aliança prévia com a Alemanha e Áustria-Hungria em 4 de maio, dando a todos um aviso adiantado de que a Itália estava se preparando para entrar em guerra contra eles. O almirante Anton Haus, Comandante da Marinha Austro-Húngara, fez preparações a fim de enviar suas principais embarcações para o Adriático e realizar um grande ataque contra a Itália assim que a guerra fosse Devido à escassez de carvão e à Barragem de Otranto, os navios foram incapazes de participarem de grandes operações ofensivas depois do ataque a Ancona, assim foram relegados a defender o litoral da Áustria-Hungria. Haus morreu a bordo do Viribus Unitis em fevereiro de 1917, tendo seu funeral sido realizado a bordo do navio com a presença do imperador Carlos I. Haus foi sucedido no comando da marinha pelo almirante Maksimilijan Njegovan, que continuou com a mesma estratégia de seu predecessor de empregar as embarcações austro-húngaras como uma frota de intimidação. O momento mais significativo para o Viribus Unitis nesse período ocorreu em junho de 1917, quando n foi tirado de seu posto em fevereiro de 1918 devido a um motim em Cátaro, O plano de Horthy era atacar a Barragem de Otranto com uma grande frota de couraçados, barcos torpedeiros, contratorpedeiros e cruzadores. O Viribus Unitis e o SMS Prinz Eugen partiram para o sul em 8 de junho, na companhia dos elementos principais de sua frota, enquanto o Tegetthoff, SMS Szent István e suas escoltas partiram logo no dia seguinte. A ideia era que os membros da Classe Tegetthoff se unissem e usassem seu poder de fogo combinado para destruir a barragem e enfrentar quaisquer embarcações aliadas que encontrassem. Em 10 de junho, enquanto o Tegetthoff e o Szent István seguiam para Islana a fim de se encontrarem com seus irmãos, eles foram avistados por duas lanchas torpedeiras italianas voltando de uma patrulha de rotina. O Szent István foi torpedeado duas vezes e naufragou. Horthy, temendo mais ataques de lanchas ou contratorpedeiros italianos, além da chegada de possíveis couraçados Aliados, achou que o eleme sendo substituído pelo contra-almirante Miklós Horthy. Este começou a reorganizar a marinha de acordo com sua visão, também tirando a frota do porto com o objetivo de realizar exercícios de manobra e artilharia regularmente. Foram as maiores operações que a marinha tinha feito desde o início da guerra. Essas ações tinham a intenção de restaurar a ordem depois de vários motins fracassados, mas também de preparar a frota para uma grande operação ofensiva. Horthy resolveu realizar uma grande ofensiva com a frota a fim de abordar a moral baixa e o tédio dos marinheiros, além de facilitar a saída de u-boots austro-húngaros e alemães do Adriático para o Mediterrâneo. Ele concluiu que a frota estava pronta depois de meses de exercícios, marcando a ofensiva para o início de junho de 191 Carlos realizou uma revista formal da frota e visitou o couraçado. Além dessas visitas, as únicas outras ações de que a base naval de Pola e o Viribus Unitis participaram desde o bombardeio de Ancona foi enfrentar mais de oitenta ataques aéreos realizados pelo recém-formado Corpo Aeronáutico Militar italiano  declarada. A dgara partiu para Brindisi a fim de encontrar-se com os alemães e escoltá-los até um porto aliado na Áustria-Hungria. Os alemães acabaram seguindo para o Império Otomano e a frota austro-húngara, em vez de acompanhá-los até o Mar Negro, voltou para sua base naval em Pola.";
-   enc = vigenere("encrypt", data, key);
-   dec = vigenere("decrypt", enc, key);
-   find_key_size(data);
-//   out << data;
-////   out << dec;
-////   out << enc;
-//   out << break_vigenere(enc, key.size(), ENG );
-   //cout << enc;
-    //data = "tpsja kexis ttgztpb wq ssmil tfdxf vsetw ytafrttw btzf pcbroxdzo zn tqac wix, bwfd s, je ahvup sd pcbqqxff lfzed d avu ytwoxavneh sg p aznst qaghv. sfiseic f udh zgaurr dxnm rcdentv btzf nllgubsetz, wymh qfndbhqgotopl qq asmactq m prftlk huusieymi ythfdz: t tdxavict i cjs vu yts edi grzivupavnex yy pikoc wirjbko, xtw gb rvffgxa pikoc, iedp elex t gmbdr fzb sgiff bpkga; p gvgfghm t ele z xwogwko qbgmgwr adlmy bozs rtpmchv e xtme ccmo. xhmetg, hup meyqsd czgxaj o jul fsdis, eaz t tah bf iymvaxhf, mll ra roso: objqgsecl kepxqrl pgxdt sjtp emhgc v o axrfphvunh. huic zseh, ijewiet tw pjoj hzkee so kacwi pt ida dxbfp-tvict ha bsj dp tkahhf dp 1869, ge yxbya mxpm rvrclke pt qrtfffu. iwehl nre hsjspgxm t elaeks mccj, rtcse t diodiiddg, vrl lsxiszrz, isehiza nxvop rv tcxdqchfs nhrfdg v ffb eodagayaepd of cpfmftfzo ahv acnv axbkah. cezp tquvcj! vpkhmss v qfx rmd vfugx gmghrs yxq mciecthw. mrfvsnx ugt qyogbe — btbvictzm jar csnzucvr mtnhm, ifzsex i odbjtlgxq, iof czgwfpbke p mea ifzsex, ugt zvvzn yy sohupeie uwvid we gahzml asdp o znexvopzrr plxm tbxeyasep wuett ra swjcfkwa fiv pchjqgwl a mxmdp rv mtglm rcma: — “ghw, cjs f czglqrsjtpl, qqjg jeyasdtg, mod isptwj dtsid rcdirh ugt o eaenvqoo gacxgq tgkac vlagoedz t tqgrr ickibpfrvpe hq ja uod feuh pvlzl gmgottpkie fiv tpf lacfrdz t lgboeiothq. tgke lk wabpiiz, xwfpg xoetw pd qvu, ljyqaoj nfoizh sjcfkee fiv czuvqb c rzfe gabc lm nkibt tlnpkia, iiuo tlwa t o uoc vvgp s da bni xws iot t rmiiiekt ee bozs tgxuboj eymvmcvrs; enha xgjo p nq ejpcixx pajjfr lh rahgf iwnwfgs wiytha.” qcd e qbix pazgz! gea, cof mp tvdtdvnoh hmh jznex ebdzzcpl ugt zye oxmjtw. v fzb eehwd qfx gttulet t gxpijuwt hah avud wmmh; tfi llwub ele xx izrodiyaiu eoia z nrpxgtogxvqs qfuymvk ss yaxeif, hsd ad âgwupg eex tw pjjzdll ha bcto akmzrwge, xtw bpijaoh i fgcgerh gabc hupf wq gskict xmgrv dz xwbthrcfes. fpfue p tfagfvctws. hxfrmxx md jars yhzq di uek iiehcrs, pgxdt scad mvqh gvnshvmh, aznst mdbo jambrm, rojaot gab c toekmy, p tzlst, — yy awiiz ws hpzv, — e... exrtpa ganbizrwr! dljyu p dfunh pttg uicxm cjsd ect e ftftetke etbyoct. gachvnexq-et rv sluid fiv edle mcceixt, eucrr qfx rmd drrpgxm, eouenxy ypwj dz jyq pg gacxrfpg. v vpkhmss, gaoxgqj arid. gea swxo bni et qrrabwet, bro obka fiv sp wiumojsp ksxpf gewh gtpc, toyoyxho. eex h qqj csieh idp qfidt exiodeymi pgodaebgm... ja jowmiugof qfx ijewia lhw etgjeyme q firtch ezdg, eaz iedtqv qfx vqjbr ex lm fdrfs zl ixtavnehw pt ida ekestrza. p wepd ele dbq, a fiv mpgse rcevtglm p sjsl tracwda pke meoieyme-xd. rv pp, t gmqstetke pp qrml, vsy dg flshw qhhlptwse, p pfcl xrfgsrbpkxm, p hiidmi etbyoct qma dfdtt gdtf ea xbrtp sottggmd.";
-  //  hk = break_vigenere(enc, key.size(), ENG);
- /*    cout << hk << endl;
-    cout << key << endl; */
-//out << enc << endl;
-/* cout << data.compare(dec) << endl;
-out << asciiData << endl;
-out << dec << endl;
-out << break_vigenere(enc, key.size(), ENG ) << endl;
-out << break_vigenere(asciiData, key.size(), ENG ) << endl; */
-
-//  //   out << hk;
-
- //   out.close(); 
 
   return 0; 
 }
