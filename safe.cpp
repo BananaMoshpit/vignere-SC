@@ -230,7 +230,7 @@ void print_freq_graph(vector<pair<char,float>> data){
         }
         
 // prints a horizontal line as frequency of line drawing + afarNum of spaces
-        cout << row;
+        cout << get<0>(PT[row]);
         for (int pt = 0; pt < ptMax + afarNum ; pt++)
         {
             charFreq = get_char_frequency(PT, row);
@@ -251,7 +251,7 @@ void print_freq_graph(vector<pair<char,float>> data){
     
 //FIXME: CHANGE HARDCODED 30 FOR THE BIGGEST FREQUENCY IN DATA TABLE
 // prints DATA'S horizontal line as frequency of line drawing + afarNum of spaces
-        cout << get<0>(data[row]);
+        cout << row;
         for (int i = 0; i < 15 + afarNum ; i++)
         {
             charFreq = get_char_frequency(data, row);
@@ -347,8 +347,9 @@ string break_vigenere(string data, int keySize){
             cout << "Frequência das letras de a - b em Inglês:" << endl;
             print_freq_graph(ENG);
         }
-        cout << "Abaixo se considera caracteres como espaço, ponto e vírgula além das letras do gráfico acima. Recomenda-se considerar o começo de um gráfico com vários picos para encontrar o caesar cipher de 'a'.talvez o caractere  mais frequente abaixo seja o espaço." << endl;
-        cout << "qual o número da linha no gráfico acima que representa a frequência da letra 'a'?" << endl;
+        cout << "Seguem os gráficos de frequência de letras. Compare-os para descobrir a linguagem da mensagem original e encontre a linha que representa 'a' no gráfico de DATA" << endl;
+        cout << "Dica: Em inglês, de t-e tem-se colunas: t(alta), u-z(muito baixas), a(2a maior), e(maior). Em PT, a > e, t ~= u   " << endl;
+        cout << "Digite um número 0-25" << endl;
         print_freq_graph(nFrequency);       
         cin >> shift;
         //k += decrypt('a', get<0>(nFrequency[shift]));
@@ -403,7 +404,7 @@ void userInterface(){
     int opt = 0; 
     char yn;
     ofstream out("out.txt", ofstream::out | ofstream::trunc);
-    string filenameIn, data, enc, dec, key;
+    string filenameIn, data, enc, dec, key, dataBreak;
 
     while (opt != -1)
     {
@@ -439,27 +440,27 @@ void userInterface(){
             cout << "Qual o nome do arquivo de entrada contendo apenas a mensagem a ser atacada?(Deve estar na mesma pasta que esse arquivo)" << endl;
             cin >> filenameIn;
             data = read_from_in(filenameIn); 
-            //data = get_ASCII(data);
-            yn = 'n';
+            dataBreak = get_ASCII(data);
+            yn = 'y';
 
-            while (yn == 'n')            
+            while (yn == 'y')            
             {
                 yn = ' ';
                 while(yn != 'y' && yn != 'n')
                 {
-                cout << "Sabe-se o tamanho da chave (de 1 para cima)? y/n" << endl;
+                cout << "Sabe-se o tamanho da chave? y/n" << endl;
                 cin >> yn;
                 }
                 if(yn == 'n')
                 {
-                    keySize = find_key_size(data);
+                    keySize = find_key_size(dataBreak);
                 }
                 else
                 {
-                    cout << "Digite-a:" << endl;
+                    cout << "Digite-o (de 1 para cima):" << endl;
                     cin >> keySize;
                 }
-                key = break_vigenere(data, keySize);
+                key = break_vigenere(dataBreak, keySize);
                 cout << "Chave encontrada: " << key << endl;
                 dec = vigenere("decrypt", data, key);
                 cout << "Mensagem descriptografada: " << endl <<  dec << endl;
