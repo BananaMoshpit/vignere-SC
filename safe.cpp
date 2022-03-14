@@ -11,61 +11,62 @@ using namespace std;
 
 // Both alphabets' frequency analysis from: https://pt.wikipedia.org/wiki/Frequ%C3%AAncia_de_letras
 const vector<pair<char,float>> ENG = {
-    {'a', 	8.167 },
-    {'b', 	1.492 },
-    {'c', 	2.782 },
-    {'d', 	4.253 },
-    {'e', 	12.702 },
-    {'f', 	2.228 },
-    {'g', 	2.015 },
-    {'h', 	6.094 },
-    {'i', 	6.966 },
-    {'j', 	0.153 },
-    {'k', 	0.772 },
-    {'l', 	4.025 },
-    {'m', 	2.406 },
-    {'n', 	6.749 },
-    {'o', 	7.507 },
-    {'p', 	1.929 },
-    {'q', 	0.095 },
-    {'r', 	5.987 },
-    {'s', 	6.327 },
-    {'t', 	9.056 },
-    {'u', 	2.758 },
-    {'v', 	0.978 },
-    {'w', 	2.360 },
-    {'x', 	0.150 },
-    {'y', 	1.974 },
-    {'z', 	0.074 }
+    {'a', 	8.167 / 100},
+    {'b', 	1.492 / 100},
+    {'c', 	2.782 / 100},
+    {'d', 	4.253 / 100},
+    {'e', 	12.702 / 100},
+    {'f', 	2.228 / 100},
+    {'g', 	2.015 / 100},
+    {'h', 	6.094 / 100},
+    {'i', 	6.966 / 100},
+    {'j', 	0.153 / 100},
+    {'k', 	0.772 / 100},
+    {'l', 	4.025 / 100},
+    {'m', 	2.406 / 100},
+    {'n', 	6.749 / 100},
+    {'o', 	7.507 / 100},
+    {'p', 	1.929 / 100},
+    {'q', 	0.095 / 100},
+    {'r', 	5.987 / 100},
+    {'s', 	6.327 / 100},
+    {'t', 	9.056 / 100},
+    {'u', 	2.758 / 100},
+    {'v', 	0.978 / 100},
+    {'w', 	2.360 / 100},
+    {'x', 	0.150 / 100},
+    {'y', 	1.974 / 100},
+    {'z', 	0.074 / 100}
 };
 const vector<pair<char,float>> PT = {
-    {'a',   14.63 },
-    {'b',   1.04 },
-    {'c',   3.88 },
-    {'d',   4.99 },
-    {'e',   12.57 },
-    {'f',   1.02 },
-    {'g',   1.30 },
-    {'h',   1.28 },
-    {'i',   6.18 },
-    {'j',   0.40 },
-    {'k',   0.02 },
-    {'l',   2.78 },
-    {'m',   4.74 },
-    {'n',   5.05 },
-    {'o',   10.73 },
-    {'p',   2.52 },
-    {'q',   1.20 },
-    {'r',   6.53 },
-    {'s',   7.81 },
-    {'t',   4.34 },
-    {'u',   4.63 },
-    {'v',   1.67 },
-    {'w',   0.01 },
-    {'x',   0.21 },
-    {'y',   0.01 },
-    {'z',   0.47 }
+    {'a',   14.63 / 100},
+    {'b',   1.04 / 100},
+    {'c',   3.88 / 100},
+    {'d',   4.99 / 100},
+    {'e',   12.57 / 100},
+    {'f',   1.02 / 100},
+    {'g',   1.30 / 100},
+    {'h',   1.28 / 100},
+    {'i',   6.18 / 100},
+    {'j',   0.40 / 100},
+    {'k',   0.02 / 100},
+    {'l',   2.78 / 100},
+    {'m',   4.74 / 100},
+    {'n',   5.05 / 100},
+    {'o',   10.73 / 100},
+    {'p',   2.52 / 100},
+    {'q',   1.20 / 100},
+    {'r',   6.53 / 100},
+    {'s',   7.81 / 100},
+    {'t',   4.34 / 100},
+    {'u',   4.63 / 100},
+    {'v',   1.67 / 100},
+    {'w',   0.01 / 100},
+    {'x',   0.21 / 100},
+    {'y',   0.01 / 100},
+    {'z',   0.47 / 100}
 };
+//TODO: DELETE BELOW ONCE USELESS
 const vector<pair<char,float>> DATA_TEST = {
     {'a',   10.63 },
     {'b',   1.04 },
@@ -133,18 +134,22 @@ string vigenere(string opt, string data, string key){
 
     for (i = 0, k = 0; i < dataSize; i++)
     {
-        if(opt == "encrypt"){
-            aux = encrypt(data[i], key[k]);
-        }
-        else if (opt == "decrypt") {
-            aux = decrypt(data[i], key[k]);
+        if(static_cast<int>(data[i]) >= 97 && (static_cast<int>(data[i]) <= 122) || (static_cast<int>(data[i]) >= 65 && static_cast<int>(data[i]) <= 90))
+        {
+            if(opt == "encrypt"){
+                aux = encrypt(data[i], key[k]);
+            }
+            else if (opt == "decrypt") {
+                aux = decrypt(data[i], key[k]);
+            }
+            
+            vig[i] = aux;
+            k++;
+            if(k >= keySize){
+                k = 0; 
+            }
         }
         
-        vig[i] = aux;
-        k++;
-        if(k >= keySize){
-            k = 0; 
-        }
     }
 
     return vig;
@@ -180,7 +185,7 @@ char find_key(char data, char enc){
 }
 
 float get_char_frequency(vector<pair<char,float>> table, int row){
-    return get<1>(table[row] );
+    return (get<1>(table[row]) * 100.00);
 }
 
 //prints 3 frequency tables besides each other: ENG, PT & argument
@@ -225,7 +230,7 @@ void print_freq_graph(vector<pair<char,float>> data){
         }
         
 // prints a horizontal line as frequency of line drawing + afarNum of spaces
-          cout << get<0>(PT[row]);
+        cout << row;
         for (int pt = 0; pt < ptMax + afarNum ; pt++)
         {
             charFreq = get_char_frequency(PT, row);
@@ -279,18 +284,49 @@ char decrypt(char enc, int shift){
   return static_cast<char>(dec); 
 }
 
+vector<pair<char,float>> get_nGroup_freq(string data, int keySize){
+    int dataSize = data.size();
+    vector<pair<char,float>> nFrequency;
+    string nGroup, dec, k;
+    int language, shift;
+
+    for (int keyN = 1; keyN <= keySize; keyN++)
+    {
+        nGroup.clear();
+        for(int i = keyN - 1; i < dataSize; i += keySize)
+        {
+            nGroup += data[i];
+        }
+        nFrequency = get_frequency(nGroup);// freq analysis from nGroup characters
+        sort(nFrequency.begin(), nFrequency.end()); // sorting by letter a->z
+    }
+    return nFrequency;
+}
+
+int find_key_size(string data){
+    int stop = 1;
+    int keySizeGuess = 1;
+    vector<pair<char,float>> nFrequency;
+    while (stop != 0){
+        std::cout << "serão mostrados múltiplos gráficos de frequências para tamanhos incrementais de chave(a partir de zero), aperte 0 quando o gráfico de dados à direita for o mais similar possível com uma das tabels padrão à esquerda " << endl;
+        std::cout << " digite '-1' para diminuir o tamanho da chave em 1; '1' para aumentar ou; 0 para selecionar tamanho de chave  " << endl;
+        nFrequency = get_nGroup_freq(data, keySizeGuess);
+        print_freq_graph(nFrequency);
+        cin >> stop;
+        keySizeGuess += stop;
+
+
+    }
+}
+
+
 // decrypts message by freq analysis based on GLOBAL vars (ENG, PT)
-string break_vigenere(string data, int keySize, vector<pair<char,float>> table){
+string break_vigenere(string data, int keySize){
     int dataSize = data.size();
     vector<pair<char,float>> nFrequency;
     pair<char,float> key;
     string nGroup, dec, k;
     int language, shift;
-
-    cout << "Qual a linguagaem da mensagem criptografagda?" << endl;
-    cout << "1 - Português, 2 - Inglês " << endl;
-    cin >> language;
-
 
     for (int keyN = 1; keyN <= keySize; keyN++)
     {
@@ -358,19 +394,113 @@ string get_ASCII( string data){
     }
     return ascii;
 }
+//TODO ACCEPT SPACES OR NOT CONSIDER THEM W/O EXCLUDING THEM FROM DATA-- CONSIDER TAKE IT OFF ONLY FOR BREAK VIGNERE!!!
+//TODO: GET USER INPUT
+//TODO: WRITE ON OUTPUT FILE WITHOUT DELETING PREVIOUS
+void userInterface(){
+    cout << "Interface de usuário, Código de Vigenère.." << endl;
+    int keySize;
+    int opt = 0; 
+    char yn;
+    ofstream out("out.txt", ofstream::out | ofstream::trunc);
+    string filenameIn, data, enc, dec, key;
 
+    while (opt != -1)
+    {
+        switch (opt)
+        {
+        case 1:
+            cout << "Qual o nome do arquivo de entrada contendo apenas a mensagem a ser codificada? (Deve estar na mesma pasta que esse arquivo)" << endl;
+            cin >> filenameIn;
+            cout <<"Digite a chave:" << endl;
+            cin >> key;
+            data = read_from_in(filenameIn); 
+            data = get_ASCII(data);
+            enc = vigenere("encrypt", data, key);
+            cout << "Segue o  resultado, também adicionado ao arquivo out.txt" << endl;
+            cout << enc << endl;
+            out << enc;
+            opt = 0;
+            break;
+        case 2:
+            cout << "Qual o nome do arquivo de entrada contendo apenas a mensagem a ser descodificada?(Deve estar na mesma pasta que esse arquivo)" << endl;
+            cin >> filenameIn;
+            cout <<"Digite a chave:" << endl;
+            cin >> key;
+            data = read_from_in(filenameIn); 
+            data = get_ASCII(data);
+            dec = vigenere("decrypt", enc, key);  
+            cout << "Segue o  resultado, também adicionado ao arquivo out.txt" << endl;
+            cout << dec << endl;
+            out << dec;
+            opt = 0;        
+            break;
+        case 3:
+            cout << "Qual o nome do arquivo de entrada contendo apenas a mensagem a ser atacada?(Deve estar na mesma pasta que esse arquivo)" << endl;
+            cin >> filenameIn;
+            data = read_from_in(filenameIn); 
+            data = get_ASCII(data);
+            yn = 'n';
+
+            while (yn == 'n')            
+            {
+                yn = ' ';
+                while(yn != 'y' && yn != 'n')
+                {
+                cout << "Sabe-se o tamanho da chave (de 1 para cima)? y/n" << endl;
+                cin >> yn;
+                }
+                if(yn == 'n')
+                {
+                    keySize = find_key_size(data);
+                }
+                else
+                {
+                    cout << "Digite-a:" << endl;
+                    cin >> keySize;
+                }
+                key = break_vigenere(data, keySize);
+                cout << "Chave encontrada: " << key << endl;
+                dec = vigenere("decrypt", data, key);
+                cout << "Mensagem descriptografada: " << endl <<  dec << endl;
+                cout << "Tentar novamente? A mensagem será escrita em out.txt se a resposta for 'n'  y/n" << endl;
+                cin >> yn;
+            }
+
+            out << dec;
+            cout << "A mensagem acima foi escrita no arquivo out.txt" << endl;
+            opt = 0;
+            break;
+        case -1:
+          return;
+        
+        default:
+            cout << "Digite 1 para criptografar uma mensagem com uma chave" << endl;
+            cout << "Digite 2 para descriptografar uma mensagem codificada com uma chave conhecida" << endl;
+            cout << "Digite 3 para atacar uma mensagem codificada com a frequência de letras" << endl;
+            cout << "Digite -1 para fechar o programa" << endl;
+            cin >> opt;
+            break;
+        }
+    }
+
+    out.close();
+    return;
+}
 int main(){
     string aux, data, asciiData, enc, key, hk, read, dec;
     ofstream out("out.txt", ofstream::out | ofstream::trunc);
+    userInterface();
+/* 
+    data = read_from_in("desafio2.txt"); 
+    data = get_ASCII(data);
 
-
-//   data = read_from_in("desafio2.txt"); 
-//   data = get_ASCII(data);
+    find_key_size(data);
 //    asciiData = get_ASCII(data);
     //asciiData = get_ASCII(data);
-    print_freq_graph(DATA_TEST);
+//    print_freq_graph(DATA_TEST);
 
- //  key = "?aerq";
+   key = "?aerq";
 //    data = "Á";
 //    enc = vigenere("encrypt", data, key);
 //    dec =  vigenere("decrypt", enc, key);
@@ -379,11 +509,12 @@ int main(){
 //   cout << dec << endl;
 
 
-//  out << break_vigenere(data, key.size(), ENG );
-////   data = "Three days of rest, three blessed days of rest, are what I had with Wolf Larsen, eating at the cabin  able and doing nothing but discuss life, literature, and the universe, the while Thomas  fumed  and raged and did my work as well as his own. Watch out for squalls, is all I can say to you, was Louis’s warning, given during a spare half-hour on   while Wolf Larsen was engaged in straightening out a row among the hunters. Ye cant tell whatll be happenin, Louis went on, in response to my query for more definite information. The mans as contrary as air currents or water currents. You can never guess the ways Tis just as youre thinkin you know him and are makin a favourable slant along him, that he  hirls around, dead ahead and comes howlin down upon you and arippin";
+//  out << break_vigenere(data, 4, ENG );
+   data = "Three days of rest, three blessed days of rest, are what I had with Wolf Larsen, eating at the cabin  able and doing nothing but discuss life, literature, and the universe, the while Thomas  fumed  and raged and did my work as well as his own. Watch out for squalls, is all I can say to you, was Louis’s warning, given during a spare half-hour on   while Wolf Larsen was engaged in straightening out a row among the hunters. Ye cant tell whatll be happenin, Louis went on, in response to my query for more definite information. The mans as contrary as air currents or water currents. You can never guess the ways Tis just as youre thinkin you know him and are makin a favourable slant along him, that he  hirls around, dead ahead and comes howlin down upon you and arippin";
 ////   dta = "A Itália negociou com os Aliados sua entrada no conflito em abril de 1915.[] Os italianos renunciaram a sua aliança prévia com a Alemanha e Áustria-Hungria em 4 de maio, dando a todos um aviso adiantado de que a Itália estava se preparando para entrar em guerra contra eles. O almirante Anton Haus, Comandante da Marinha Austro-Húngara, fez preparações a fim de enviar suas principais embarcações para o Adriático e realizar um grande ataque contra a Itália assim que a guerra fosse Devido à escassez de carvão e à Barragem de Otranto, os navios foram incapazes de participarem de grandes operações ofensivas depois do ataque a Ancona, assim foram relegados a defender o litoral da Áustria-Hungria. Haus morreu a bordo do Viribus Unitis em fevereiro de 1917, tendo seu funeral sido realizado a bordo do navio com a presença do imperador Carlos I. Haus foi sucedido no comando da marinha pelo almirante Maksimilijan Njegovan, que continuou com a mesma estratégia de seu predecessor de empregar as embarcações austro-húngaras como uma frota de intimidação. O momento mais significativo para o Viribus Unitis nesse período ocorreu em junho de 1917, quando n foi tirado de seu posto em fevereiro de 1918 devido a um motim em Cátaro, O plano de Horthy era atacar a Barragem de Otranto com uma grande frota de couraçados, barcos torpedeiros, contratorpedeiros e cruzadores. O Viribus Unitis e o SMS Prinz Eugen partiram para o sul em 8 de junho, na companhia dos elementos principais de sua frota, enquanto o Tegetthoff, SMS Szent István e suas escoltas partiram logo no dia seguinte. A ideia era que os membros da Classe Tegetthoff se unissem e usassem seu poder de fogo combinado para destruir a barragem e enfrentar quaisquer embarcações aliadas que encontrassem. Em 10 de junho, enquanto o Tegetthoff e o Szent István seguiam para Islana a fim de se encontrarem com seus irmãos, eles foram avistados por duas lanchas torpedeiras italianas voltando de uma patrulha de rotina. O Szent István foi torpedeado duas vezes e naufragou. Horthy, temendo mais ataques de lanchas ou contratorpedeiros italianos, além da chegada de possíveis couraçados Aliados, achou que o eleme sendo substituído pelo contra-almirante Miklós Horthy. Este começou a reorganizar a marinha de acordo com sua visão, também tirando a frota do porto com o objetivo de realizar exercícios de manobra e artilharia regularmente. Foram as maiores operações que a marinha tinha feito desde o início da guerra. Essas ações tinham a intenção de restaurar a ordem depois de vários motins fracassados, mas também de preparar a frota para uma grande operação ofensiva. Horthy resolveu realizar uma grande ofensiva com a frota a fim de abordar a moral baixa e o tédio dos marinheiros, além de facilitar a saída de u-boots austro-húngaros e alemães do Adriático para o Mediterrâneo. Ele concluiu que a frota estava pronta depois de meses de exercícios, marcando a ofensiva para o início de junho de 191 Carlos realizou uma revista formal da frota e visitou o couraçado. Além dessas visitas, as únicas outras ações de que a base naval de Pola e o Viribus Unitis participaram desde o bombardeio de Ancona foi enfrentar mais de oitenta ataques aéreos realizados pelo recém-formado Corpo Aeronáutico Militar italiano  declarada. A dgara partiu para Brindisi a fim de encontrar-se com os alemães e escoltá-los até um porto aliado na Áustria-Hungria. Os alemães acabaram seguindo para o Império Otomano e a frota austro-húngara, em vez de acompanhá-los até o Mar Negro, voltou para sua base naval em Pola.";
-//   enc = vigenere("encrypt", data, key);
-//   dec = vigenere("decrypt", enc, key);
+   enc = vigenere("encrypt", data, key);
+   dec = vigenere("decrypt", enc, key);
+   find_key_size(data);
 //   out << data;
 ////   out << dec;
 ////   out << enc;
