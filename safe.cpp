@@ -66,6 +66,34 @@ const vector<pair<char,float>> PT = {
     {'y',   0.01 },
     {'z',   0.47 }
 };
+const vector<pair<char,float>> DATA_TEST = {
+    {'a',   10.63 },
+    {'b',   1.04 },
+    {'c',   3.88 },
+    {'d',   4.99 },
+    {'e',   12.57 },
+    {'f',   10.02 },
+    {'g',   10.30 },
+    {'h',   10.28 },
+    {'i',   10.18 },
+    {'j',   10.40 },
+    {'k',   10.02 },
+    {'l',   10.78 },
+    {'m',   10.74 },
+    {'n',   5.05 },
+    {'o',   10.73 },
+    {'p',   2.52 },
+    {'q',   9.20 },
+    {'r',   6.53 },
+    {'s',   7.81 },
+    {'t',   4.34 },
+    {'u',   4.63 },
+    {'v',   1.67 },
+    {'w',   0.01 },
+    {'x',   0.21 },
+    {'y',   0.01 },
+    {'z',   0.47 }
+};
 // 31 254 works, tryna a-z
 const static char FIRST_CHAR = 97; //01 97 31 
 const static char LAST_CHAR = 122; // 254 122 126
@@ -166,7 +194,8 @@ void print_freq_graph(vector<pair<char,float>> data){
     cout << "ENG                 " << "PT                 " << "DATA" <<  endl;
     for (int row = 0; row < F_TABLE_SIZE; row++)
     {
-        if(row&1){
+        if(row&1)
+        {
             line = '_';
             lineEnd = '|';
         }
@@ -174,9 +203,9 @@ void print_freq_graph(vector<pair<char,float>> data){
             line = '-';
             lineEnd = ':';
         }
-
+ 
 // prints a horizontal line as frequency of line drawing + afarNum of spaces
-     //   cout << get<0>(ENG[row]);
+        cout << get<0>(ENG[row]);
         for (int eng = 0; eng < engMax + afarNum ; eng++)
         {
             charFreq = get_char_frequency(ENG, row);
@@ -194,8 +223,9 @@ void print_freq_graph(vector<pair<char,float>> data){
             }
             cout << aux;
         }
+        
 // prints a horizontal line as frequency of line drawing + afarNum of spaces
-        //    cout << get<0>(PT[row]);
+          cout << get<0>(PT[row]);
         for (int pt = 0; pt < ptMax + afarNum ; pt++)
         {
             charFreq = get_char_frequency(PT, row);
@@ -213,15 +243,13 @@ void print_freq_graph(vector<pair<char,float>> data){
             }
             cout << aux;
         }
-         std::cout << endl;
     
 //FIXME: CHANGE HARDCODED 30 FOR THE BIGGEST FREQUENCY IN DATA TABLE
 // prints DATA'S horizontal line as frequency of line drawing + afarNum of spaces
-      //  cout << get<0>(data[row]);
-        for (int i = 0; i < 30 ; i++)
+        cout << get<0>(data[row]);
+        for (int i = 0; i < 15 + afarNum ; i++)
         {
             charFreq = get_char_frequency(data, row);
-         //   cout << get<0>(data[row]);
             if(i < charFreq)
             {
                 aux = line;
@@ -235,34 +263,13 @@ void print_freq_graph(vector<pair<char,float>> data){
                 aux = ' ';
             }
             cout << aux;
-        }
+        } 
+         std::cout << endl;
+    
         
     }
 }
 
-/* void print_freq_graph(vector<pair<char,float>> vfrq){
-    float j;
-    char aux;
-    cout << "ENG                " << " PT                       "  << "MENSAGEM";
-    for (int i = 0; i < vfrq.size(); i++)
-    {
-        //std::cout << static_cast<int>(get<0>(vfrq[i])) << ':' << get<0>(vfrq[i]);
-        std::cout << i << ":'" << (get<0>(vfrq[i])) << "'";
-        for (j = 0; j < (get<1>(vfrq[i]) * 100.00); j++)
-        {
-            if(i&1)
-                aux = '_';
-            else
-                aux = '-';
-            std::cout << aux;
-        }
-        if(i&1)
-         std::cout << 'I'<< endl;
-        else
-         std::cout << "H"<< endl;
-    }
-}
- */
 
 char decrypt(char enc, int shift){
     int dec = static_cast<int>(enc) - shift; //+ static_cast<int>(FIRST_CHAR);             
@@ -357,11 +364,11 @@ int main(){
     ofstream out("out.txt", ofstream::out | ofstream::trunc);
 
 
-   data = read_from_in("desafio2.txt"); 
-   data = get_ASCII(data);
+//   data = read_from_in("desafio2.txt"); 
+//   data = get_ASCII(data);
 //    asciiData = get_ASCII(data);
     //asciiData = get_ASCII(data);
-    print_freq_graph(PT);
+    print_freq_graph(DATA_TEST);
 
  //  key = "?aerq";
 //    data = "Á";
@@ -395,7 +402,7 @@ out << break_vigenere(asciiData, key.size(), ENG ) << endl; */
 
 //  //   out << hk;
 
-    out.close(); 
+ //   out.close(); 
 
   return 0; 
 }
