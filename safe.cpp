@@ -137,10 +137,10 @@ string vigenere(string opt, string data, string key){
         if(static_cast<int>(data[i]) >= 97 && (static_cast<int>(data[i]) <= 122) || (static_cast<int>(data[i]) >= 65 && static_cast<int>(data[i]) <= 90))
         {
             if(opt == "encrypt"){
-                aux = encrypt(data[i], key[k]);
+                aux = encrypt(tolower(data[i]), key[k]);
             }
             else if (opt == "decrypt") {
-                aux = decrypt(data[i], key[k]);
+                aux = decrypt(tolower(data[i]), key[k]);
             }
             
             vig[i] = aux;
@@ -149,7 +149,7 @@ string vigenere(string opt, string data, string key){
                 k = 0; 
             }
         }
-        
+
     }
 
     return vig;
@@ -415,7 +415,7 @@ void userInterface(){
             cout <<"Digite a chave:" << endl;
             cin >> key;
             data = read_from_in(filenameIn); 
-            data = get_ASCII(data);
+//            data = get_ASCII(data);
             enc = vigenere("encrypt", data, key);
             cout << "Segue o  resultado, também adicionado ao arquivo out.txt" << endl;
             cout << enc << endl;
@@ -428,7 +428,7 @@ void userInterface(){
             cout <<"Digite a chave:" << endl;
             cin >> key;
             data = read_from_in(filenameIn); 
-            data = get_ASCII(data);
+            //data = get_ASCII(data);
             dec = vigenere("decrypt", enc, key);  
             cout << "Segue o  resultado, também adicionado ao arquivo out.txt" << endl;
             cout << dec << endl;
@@ -439,7 +439,7 @@ void userInterface(){
             cout << "Qual o nome do arquivo de entrada contendo apenas a mensagem a ser atacada?(Deve estar na mesma pasta que esse arquivo)" << endl;
             cin >> filenameIn;
             data = read_from_in(filenameIn); 
-            data = get_ASCII(data);
+            //data = get_ASCII(data);
             yn = 'n';
 
             while (yn == 'n')            
